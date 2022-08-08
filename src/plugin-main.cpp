@@ -33,21 +33,31 @@ extern void load_text_gdiplus_slideshow();
 
 bool obs_module_load(void)
 {
+	return true;
+}
+
+static void OBSEvent(enum obs_frontend_event event, void *)
+{
+	if (event == OBS_FRONTEND_EVENT_FINISHED_LOADING) {
+		const auto main_window =
+			static_cast<QMainWindow *>(obs_frontend_get_main_window());
+		obs_frontend_push_ui_translation(obs_module_get_string);
+		auto *tmp = new TextSlideshowDock(main_window);
+		obs_frontend_add_dock(tmp);
+		obs_frontend_pop_ui_translation();
+	}
+}
+
+void obs_module_post_load(void)
+{
+	obs_frontend_add_event_callback(OBSEvent, nullptr);
+
 	load_text_freetype2_slideshow();
 #ifdef _WIN32
 	load_text_gdiplus_slideshow();
 #endif
-
-	const auto main_window =
-		static_cast<QMainWindow *>(obs_frontend_get_main_window());
-	obs_frontend_push_ui_translation(obs_module_get_string);
-	auto *tmp = new TextSlideshowDock(main_window);
-	obs_frontend_add_dock(tmp);
-	obs_frontend_pop_ui_translation();
-
 	blog(LOG_INFO, "plugin loaded successfully (version %s)",
-	     PLUGIN_VERSION);
-	return true;
+		PLUGIN_VERSION);
 }
 
 void obs_module_unload()

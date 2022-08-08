@@ -255,6 +255,7 @@ void load_text_freetype2_slideshow()
 	info.get_height = text_ss_height;
 	info.get_defaults = freetype2_defaults;
 	info.update = freetype2_update;
+	info.load = freetype2_update;
 	info.activate = text_ss_activate;
 	info.deactivate = text_ss_deactivate;
 	info.video_tick = text_ss_video_tick;
