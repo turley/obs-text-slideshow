@@ -104,11 +104,11 @@ static obs_source_t *get_source(struct darray *array, const char *file_path,
 		if (file_path && curr_file_path &&
 		    strcmp(file_path, curr_file_path) == 0) {
 			source = text_srcs.array[i].source;
-			obs_source_addref(source);
+			obs_source_get_ref(source);
 			break;
 		} else if (text && curr_text && strcmp(text, curr_text) == 0) {
 			source = text_srcs.array[i].source;
-			obs_source_addref(source);
+			obs_source_get_ref(source);
 			break;
 		}
 	}
@@ -663,7 +663,7 @@ static obs_source_t *get_transition(struct text_slideshow *text_ss)
 
 	pthread_mutex_lock(&text_ss->mutex);
 	tr = text_ss->transition;
-	obs_source_addref(tr);
+	obs_source_get_ref(tr);
 	pthread_mutex_unlock(&text_ss->mutex);
 
 	return tr;
